@@ -1,8 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <time.h>
 #include "CppVector.h"
+#include "SortFunctions.h"
+#include "TestFunctions.h"
+
+void testes(int qtdTestes, int tamanhoLista){
+    int  rnd, i;
+    teste **testes = (teste**)malloc(sizeof(teste*)* qtdTestes);
+    srand(time(NULL));
+
+    //criando multiplo casos de teste
+    for(i=0; i<qtdTestes; i++){
+        testes[i] = criarTeste(tamanhoLista);
+    }
+    printf("\n-------------------------------------\n");
+    printf("\n----- EXECUTANDO INSERTION SORT -----\n");
+    printf("\n-------------------------------------\n");
+
+    ExecutaTeste(testes,qtdTestes, tamanhoLista, 1);
+    imprimeTestes(testes, qtdTestes, 3);
+    printf("\nResetando resultados...\n");
+    resetaResultado(testes, qtdTestes, tamanhoLista);
+
+    printf("\n---------------------------------\n");
+    printf("\n----- EXECUTANDO QUICK SORT -----\n");
+    printf("\n---------------------------------\n");
+
+    ExecutaTeste(testes,qtdTestes, tamanhoLista, 2);
+    imprimeTestes(testes, qtdTestes, 3);
+    printf("\nResetando resultados...\n");
+    resetaResultado(testes, qtdTestes, tamanhoLista);
+
+    printf("\n--------------------------------\n");
+    printf("\n----- EXECUTANDO HEAP SORT -----\n");
+    printf("\n--------------------------------\n");
+
+    ExecutaTeste(testes,qtdTestes, tamanhoLista, 3);
+    imprimeTestes(testes, qtdTestes, 3);
+    printf("\nResetando resultados...\n");
+    resetaResultado(testes, qtdTestes, tamanhoLista);
+
+    printf("\n-------------------------------\n");
+    printf("\n----- EXECUTANDO C++ SORT -----\n");
+    printf("\n-------------------------------\n");
+
+    ExecutaTeste(testes,qtdTestes, tamanhoLista, 4);
+    imprimeTestes(testes, qtdTestes, 3);
+    printf("\nResetando resultados...\n");
+    resetaResultado(testes, qtdTestes, tamanhoLista);
+
+    destruirTestes(testes, qtdTestes);
+
+    return;
+}
+
 
 int main() {
     int vetor[1000], rnd;
@@ -27,10 +79,7 @@ int main() {
     push_back(l, 4);
     push_back(l, 5);
     
-    
-    
     pop_back(l);
-    
     
     insert(2, l, 10);
     
@@ -43,5 +92,7 @@ int main() {
     clear(l);
     free(l);
     
+    testes(5,100);
+
     return 0;
 }
