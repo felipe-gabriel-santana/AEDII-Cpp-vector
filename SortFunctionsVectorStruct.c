@@ -61,7 +61,6 @@ void insertionSort(lista *l, int first, int last){
     }
 }
 
-
 int partition(lista *A, int p, int r){
     int pivo = at(A, r);
     int i = p - 1;
@@ -84,7 +83,6 @@ void quicksort(lista *A, int first, int last){
     }
     return;
 }
-
 
 void maxHeapify(lista *l, int first, int i, int tamanho){
     int esq = 2 * i + 1;
@@ -151,7 +149,7 @@ void IntroSort(lista *l, int first, int last, int depthLimit) {
 }
 
 
-void sort(lista *l) {
+void sortVectorStruct(lista *l) {
     int tamanho = size(l);
     
     if (tamanho<=1){
