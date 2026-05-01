@@ -41,11 +41,20 @@ void testes(int qtdTestes, int tamanhoLista, DataType dataType ){
     printf("\nResetando resultados...\n");
     resetaResultado(testes, qtdTestes, tamanhoLista);
 
-    printf("\n-------------------------------\n");
-    printf("\n----- EXECUTANDO C++ SORT -----\n");
-    printf("\n-------------------------------\n");
+    printf("\n-------------------------------------------------\n");
+    printf("\n----- EXECUTANDO C++ SORT COM STRUCT VECTOR -----\n");
+    printf("\n-------------------------------------------------\n");
 
     ExecutaTeste(testes,qtdTestes, tamanhoLista, 4);
+    imprimeTestes(testes, qtdTestes, 3);
+    printf("\nResetando resultados...\n");
+    resetaResultado(testes, qtdTestes, tamanhoLista);
+
+    printf("\n-------------------------------------------------\n");
+    printf("\n----- EXECUTANDO C++ SORT COM VETOR SIMPLES -----\n");
+    printf("\n-------------------------------------------------\n");
+
+    ExecutaTeste(testes,qtdTestes, tamanhoLista, 5);
     imprimeTestes(testes, qtdTestes, 3);
     printf("\nResetando resultados...\n");
     resetaResultado(testes, qtdTestes, tamanhoLista);

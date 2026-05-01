@@ -90,9 +90,12 @@ void imprimeTeste(teste **testes, int i, int modo){
 }
 void imprimeTestes(teste **testes,int qtdTestes,int modo){
 
+    int falhas=0;
     for(int i=0; i<qtdTestes;i++){
+        if(testes[i]->valida != true) falhas++;
         imprimeTeste(testes, i, modo);
     }
+    printf("\nFalhas: [ %i ]",falhas);
 
     return;
 }
@@ -132,7 +135,10 @@ void ExecutaTeste(teste **testes,int qtdTestes, int tamanhoLista, int algoritmo)
             heapsort(testes[i]->saida, 0, tamanhoLista-1);
             break;
         case 4:
-            sort(testes[i]->saida);
+            sortVectorStruct(testes[i]->saida);
+            break;
+        case 5:
+            sortCpp(testes[i]->saida);
             break;
         default:
             break;
