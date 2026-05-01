@@ -2,6 +2,12 @@
 #define CPPVECTOR_H
 
 #include <stdbool.h>
+
+typedef enum {
+    TYPE_INT,
+    TYPE_CHAR
+} DataType;
+
 typedef struct no {
     int valor;
     struct no *prox;
@@ -9,14 +15,15 @@ typedef struct no {
 } no;
 
 typedef struct lista {
+    DataType dataType;
     struct no *ini;
     struct no *fim;
 } lista;
 
-lista* crialista();
-void push_back(lista *l, int valor);
+lista* crialista(DataType dataType);
+void push_back(lista *l, void* valor);
 void pop_back(lista *l);
-void insert(int n, lista *l, int valor);
+void insert(int n, lista *l, void* valor);
 void erase(int n, lista *l);
 int size(lista *l);
 bool empty(lista *l);

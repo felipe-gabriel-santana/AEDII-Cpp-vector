@@ -1,7 +1,7 @@
 #include <math.h>
 #include "SortFunctions.h"
 
-void insertAt(lista*l, int n, int valor){
+void insertAt(lista*l, int n, void* valor){
     erase(n, l);
     insert(n,l,valor);
     return;
@@ -12,10 +12,18 @@ void swapValues(lista *l, int i, int j){
         return;
     }
 
-    int aux = at(l,i);
+    if (l->dataType == TYPE_INT) {
+        int aux1 = at(l,i);
+        int aux2 = at(l,j);
+        insertAt(l,i,&aux2);
+        insertAt(l,j,&aux1);
+    } else {
+        char aux1 = (char) at(l,i);
+        char aux2 = (char) at(l,j);
+        insertAt(l,i,&aux2);
+        insertAt(l,j,&aux1);
+    }
 
-    insertAt(l,i,at(l, j));
-    insertAt(l,j,aux);
     return;
 }
 
@@ -25,16 +33,31 @@ void insertionSort(lista *l, int first, int last){
         return;
     }
     int i, j, x;
-
-    for(i= first+1; i<=last; i++){
-        x = at(l,i);
-        j=i-1;
-
-        while (j>= first && at(l,j)>x){
-            insertAt(l,j+1,at(l,j));
-            j--;
+    if(l->dataType == TYPE_INT){
+        int val;
+        for(i= first+1; i<=last; i++){
+            x = at(l,i);
+            j=i-1;
+            while (j>= first && at(l,j)>x){
+                val = at(l,j);
+                insertAt(l,j+1,&val);
+                j--;
+            }
+            insertAt(l,j+1,&x);
         }
-        insertAt(l,j+1,x);
+    }else{
+        char val;
+        for(i= first+1; i<=last; i++){
+            x = at(l,i);
+            j=i-1;
+            while (j>= first && at(l,j)>x){
+                val = (char) at(l,j);
+                insertAt(l,j+1,&val);
+                j--;
+            }
+            val = (char) x;
+            insertAt(l,j+1,&val);
+        }
     }
 }
 

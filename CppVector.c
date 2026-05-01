@@ -2,18 +2,25 @@
 #include <stdlib.h>
 #include "CppVector.h"
 
-lista* crialista() {
+lista* crialista(DataType dataType) {
     lista *l = (lista*)malloc(sizeof(lista));
     l->ini = NULL;
     l->fim = NULL;
+    l->dataType = dataType;
     return l;
 }
 
-void push_back(lista *l, int valor) {
+void push_back(lista *l, void* valor) {
     no *novo = (no*)malloc(sizeof(no));
     novo->prox = NULL;
     novo->ant = NULL;
-    novo->valor = valor;
+
+    //identifica tipo de dado e faz conversão para tipo int
+    if (l->dataType == TYPE_INT) {
+        novo->valor = *(int *)valor;
+    } else {
+        novo->valor = (int)(*(char *)valor);
+    }
 
     if (l->ini == NULL) {
         l->ini = novo;
@@ -42,7 +49,7 @@ void pop_back(lista *l) {
     free(aux);
 }
 
-void insert(int n, lista *l, int valor) {
+void insert(int n, lista *l, void* valor) {
     no *aux = l->ini;
     
     for (int i = 0; i < n && aux != NULL; i++) {
@@ -55,7 +62,13 @@ void insert(int n, lista *l, int valor) {
     }
     
     no *novo = (no*)malloc(sizeof(no));
-    novo->valor = valor;
+
+    //identifica tipo de dado e faz conversão para tipo int
+    if (l->dataType == TYPE_INT) {
+        novo->valor = *(int *)valor;
+    } else {
+        novo->valor = (int)(*(char *)valor);
+    }
     
     if (aux == l->ini) {
         novo->ant = NULL;
@@ -147,11 +160,21 @@ int at(lista *l, int n) {
 
 void print(lista *l) {
     no *aux = l->ini;
-    printf("[ ");
-    while(aux != NULL) {
-        printf("%d ", aux->valor);
-        aux = aux->prox;
+    if(l->dataType == TYPE_INT){
+        printf("[ ");
+        while(aux != NULL) {
+            printf("%d ", aux->valor);
+            aux = aux->prox;
+        }
+        printf("]\n");
+    }else if(l->dataType == TYPE_CHAR){
+        printf("[ ");
+        while(aux != NULL) {
+            printf("%c ", (char)aux->valor);
+            aux = aux->prox;
+        }
+        printf("]\n");
     }
-    printf("]\n");
+    return;
 }
 
