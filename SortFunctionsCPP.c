@@ -34,7 +34,7 @@ void insertionSortCpp(int* vec, int first, int last){
     }
 }
 
-int medianOfThreePivot(int *vec, int p, int r){
+int medianOfThreePivotCpp(int *vec, int p, int r){
     int m = ((r-p)+1)/2;
 
     int v1 = vec[p], v2 = vec[m], v3 = vec[r];
@@ -53,7 +53,7 @@ int medianOfThreePivot(int *vec, int p, int r){
 }
 
 int partitionCpp(int* vec, int p, int r){
-    int pivo = medianOfThreePivot(vec, p, r);
+    int pivo = medianOfThreePivotCpp(vec, p, r);
     int i= p-1;
 
     for(int j = p; j <= r - 1; j++) {

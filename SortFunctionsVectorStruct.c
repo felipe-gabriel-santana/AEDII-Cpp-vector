@@ -61,8 +61,26 @@ void insertionSort(lista *l, int first, int last){
     }
 }
 
+ int medianOfThreePivot(lista *A, int p, int r){
+    int m = ((r-p)+1)/2;
+
+    int v1 = at(A,p), v2 = at(A,m), v3 = at(A,r);
+
+    if((v1>=v2 && v1<=v3) || (v1>=v3 && v1<=v2)){
+        swapValues(A,p,r);
+        return v1;
+    }
+
+    if((v2>=v1 && v2<=v3) || (v2>=v3 && v2<=v1)){
+        swapValues(A,m,r);
+        return v2;
+    }
+
+    return v3;
+}
+
 int partition(lista *A, int p, int r){
-    int pivo = at(A, r);
+    int pivo = medianOfThreePivot(A, p, r);
     int i = p - 1;
 
     for(int j = p; j <= r - 1; j++) {
