@@ -4,16 +4,25 @@
 #include "TestFunctions.h"
 #include "SortFunctions.h"
 
-teste* criarTeste(int tamanho){
+teste* criarTeste(int tamanho, DataType dataType){
     int i, rnd;
     teste *novoTeste = malloc(sizeof(teste));
-    lista *entrada = crialista();
-    lista *saida = crialista();
+    lista *entrada = crialista(dataType);
+    lista *saida = crialista(dataType);
 
-    for(int i = 0; i < tamanho; i++) {
-        rnd = rand() % 1000;
-        push_back(entrada, rnd);
-        push_back(saida, rnd);
+    if(dataType == TYPE_INT){
+        for(int i=0; i < tamanho; i++) {
+            rnd = rand() % 1000;
+            push_back(entrada, &rnd);
+            push_back(saida, &rnd);
+        }
+    }else if(dataType == TYPE_CHAR){
+        for(int i=0; i<tamanho; i++){
+            rnd = (char) (65 + (rand() % 26));
+            push_back(entrada, &rnd);
+            push_back(saida, &rnd);
+        }
+
     }
     novoTeste->entrada = entrada;
     novoTeste->saida = saida;
@@ -92,10 +101,19 @@ void resetaResultado(teste **testes, int qtdTestes, int tamanhoLista){
     for(int i=0; i<qtdTestes; i++){
         clear(testes[i]->saida);
         
-        for(int j=0; j<tamanhoLista;j++){
-            push_back(testes[i]->saida, at(testes[i]->entrada, j));
+        if(testes[1]->entrada->dataType == TYPE_CHAR){
+            char valor;
+            for(int j=0; j<tamanhoLista;j++){
+                valor = (char) at(testes[i]->entrada, j);
+                push_back(testes[i]->saida, &valor);
+            }
+        }else{
+            int valor;
+            for(int j=0; j<tamanhoLista;j++){
+                valor = at(testes[i]->entrada, j);
+                push_back(testes[i]->saida, &valor);
+            }
         }
-
         testes[i]->valida = false;
     }
 }

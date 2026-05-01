@@ -5,14 +5,14 @@
 #include "SortFunctions.h"
 #include "TestFunctions.h"
 
-void testes(int qtdTestes, int tamanhoLista){
+void testes(int qtdTestes, int tamanhoLista, DataType dataType ){
     int  rnd, i;
     teste **testes = (teste**)malloc(sizeof(teste*)* qtdTestes);
     srand(time(NULL));
 
     //criando multiplo casos de teste
     for(i=0; i<qtdTestes; i++){
-        testes[i] = criarTeste(tamanhoLista);
+        testes[i] = criarTeste(tamanhoLista, dataType);
     }
     printf("\n-------------------------------------\n");
     printf("\n----- EXECUTANDO INSERTION SORT -----\n");
@@ -55,44 +55,89 @@ void testes(int qtdTestes, int tamanhoLista){
     return;
 }
 
+void TestCppVector(DataType dataType, int list_size){
 
+    if(dataType == TYPE_CHAR){
+        int rnd;
+        char val;
+        srand(time(NULL));
+
+        lista *l = crialista(TYPE_CHAR);
+        for(int i=0; i<10; i++){
+            rnd = (char) (65 + (rand() % 26));
+            push_back(l, &rnd); //envia dado como ponteiro
+        }
+
+        val = 'A';
+        push_back(l, &val);
+        val = 'B';
+        push_back(l, &val);
+        val = 'C';
+        push_back(l, &val);
+        val = 'D';
+        push_back(l, &val);
+        val = 'E';
+        push_back(l, &val);
+        
+        pop_back(l);
+        val = 'F';
+        insert(2, l, &val);
+        
+        erase(2, l);
+        print(l);
+        
+        printf("Tamanho: %d\n", size(l));
+        printf("Elemento no indice 2: %c\n", (char)at(l, 2));
+        
+        clear(l);
+        free(l);
+    }else if(dataType == TYPE_INT){
+        int rnd, val;
+        srand(time(NULL));
+
+        lista *l = crialista(TYPE_INT);
+        
+        for(int i=0; i<10; i++){
+            rnd = rand() % 10;
+            push_back(l, &rnd); //envia dado como ponteiro
+        }
+
+        val = 1;
+        push_back(l, &val);
+        val = 2;
+        push_back(l, &val);
+        val = 3;
+        push_back(l, &val);
+        val = 4;
+        push_back(l, &val);
+        val = 5;
+        push_back(l, &val);
+        
+        pop_back(l);
+        val = 10;
+        insert(2, l, &val);
+        
+        erase(2, l);
+        print(l);
+        
+        printf("Tamanho: %d\n", size(l));
+        printf("Elemento no indice 2: %d\n", at(l, 2));
+        
+        clear(l);
+        free(l);
+        return;
+    }
+
+    return;
+
+}
 int main() {
-    int vetor[1000], rnd;
-    srand(time(NULL));
-    for(int i = 0; i < 1000; i++) {
-        rnd = rand() % 1000;
-        vetor[i] = rnd;
-    }
+    
+    TestCppVector(TYPE_INT, 10);
+    TestCppVector(TYPE_CHAR, 10);
 
-
-    lista *l = crialista();
-    
-    for(int i=0; i<1000; i++){
-        rnd = rand() % 1000;
-        push_back(l, rnd);
-    }
-    
-
-    push_back(l, 1);
-    push_back(l, 2);
-    push_back(l, 3);
-    push_back(l, 4);
-    push_back(l, 5);
-    
-    pop_back(l);
-    
-    insert(2, l, 10);
-    
-    erase(2, l);
-    print(l);
-    
-    printf("Tamanho: %d\n", size(l));
-    printf("Elemento no indice 2: %d\n", at(l, 2));
-    
-    clear(l);
-    free(l);
-    
-    testes(5,100);
+    testes(5,30,TYPE_INT);
+    testes(5,30,TYPE_CHAR);
 
     return 0;
 }

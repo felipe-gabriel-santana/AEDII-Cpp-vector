@@ -10,7 +10,7 @@ typedef struct noTest {
     struct lista *saida;
 } teste;
 
-teste* criarTeste(int tamanho);
+teste* criarTeste(int tamanho, DataType dataType);
 
 bool ordenada(lista *l, int tamanho);
 
