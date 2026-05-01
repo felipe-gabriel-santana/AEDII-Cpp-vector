@@ -34,8 +34,26 @@ void insertionSortCpp(int* vec, int first, int last){
     }
 }
 
+int medianOfThreePivot(int *vec, int p, int r){
+    int m = ((r-p)+1)/2;
+
+    int v1 = vec[p], v2 = vec[m], v3 = vec[r];
+
+    if((v1>=v2 && v1<=v3) || (v1>=v3 && v1<=v2)){
+        swapValuesCpp(vec,p,r);
+        return v1;
+    }
+
+    if((v2>=v1 && v2<=v3) || (v2>=v3 && v2<=v1)){
+        swapValuesCpp(vec,m,r);
+        return v2;
+    }
+
+    return v3;
+}
+
 int partitionCpp(int* vec, int p, int r){
-    int pivo = vec[r];
+    int pivo = medianOfThreePivot(vec, p, r);
     int i= p-1;
 
     for(int j = p; j <= r - 1; j++) {
