@@ -3,150 +3,96 @@
 #include <time.h>
 #include "CppVector.h"
 #include "SortFunctions.h"
-#include "TestFunctions.h"
 
-void testes(int qtdTestes, int tamanhoLista, DataType dataType ){
-    int  rnd, i;
-    teste **testes = (teste**)malloc(sizeof(teste*)* qtdTestes);
-    srand(time(NULL));
+typedef struct {
+    double insere, busca, ordena, remove;
+    size_t memoria;
+} Tempos;
 
-    //criando multiplo casos de teste
-    for(i=0; i<qtdTestes; i++){
-        testes[i] = criarTeste(tamanhoLista, dataType);
+int Busca_linear(lista *l, int target) {
+    no *aux = l->ini;
+    int pos = 0;
+    while (aux != NULL) {
+        if (aux->valor == target) return pos;
+        aux = aux->prox;
+        pos++;
     }
-    printf("\n-------------------------------------\n");
-    printf("\n----- EXECUTANDO INSERTION SORT -----\n");
-    printf("\n-------------------------------------\n");
-
-    ExecutaTeste(testes,qtdTestes, tamanhoLista, 1);
-    imprimeTestes(testes, qtdTestes, 3);
-    printf("\nResetando resultados...\n");
-    resetaResultado(testes, qtdTestes, tamanhoLista);
-
-    printf("\n---------------------------------\n");
-    printf("\n----- EXECUTANDO QUICK SORT -----\n");
-    printf("\n---------------------------------\n");
-
-    ExecutaTeste(testes,qtdTestes, tamanhoLista, 2);
-    imprimeTestes(testes, qtdTestes, 3);
-    printf("\nResetando resultados...\n");
-    resetaResultado(testes, qtdTestes, tamanhoLista);
-
-    printf("\n--------------------------------\n");
-    printf("\n----- EXECUTANDO HEAP SORT -----\n");
-    printf("\n--------------------------------\n");
-
-    ExecutaTeste(testes,qtdTestes, tamanhoLista, 3);
-    imprimeTestes(testes, qtdTestes, 3);
-    printf("\nResetando resultados...\n");
-    resetaResultado(testes, qtdTestes, tamanhoLista);
-
-    printf("\n-------------------------------------------------\n");
-    printf("\n----- EXECUTANDO C++ SORT COM STRUCT VECTOR -----\n");
-    printf("\n-------------------------------------------------\n");
-
-    ExecutaTeste(testes,qtdTestes, tamanhoLista, 4);
-    imprimeTestes(testes, qtdTestes, 3);
-    printf("\nResetando resultados...\n");
-    resetaResultado(testes, qtdTestes, tamanhoLista);
-
-    printf("\n-------------------------------------------------\n");
-    printf("\n----- EXECUTANDO C++ SORT COM VETOR SIMPLES -----\n");
-    printf("\n-------------------------------------------------\n");
-
-    ExecutaTeste(testes,qtdTestes, tamanhoLista, 5);
-    imprimeTestes(testes, qtdTestes, 3);
-    printf("\nResetando resultados...\n");
-    resetaResultado(testes, qtdTestes, tamanhoLista);
-
-    destruirTestes(testes, qtdTestes);
-
-    return;
+    return -1;
 }
 
-void TestCppVector(DataType dataType, int list_size){
+Tempos Executa_operacoes(int n, DataType type, const char* filename) {
+    Tempos m = {0,0,0,0,0};
+    clock_t start, end;
+    lista *l = crialista(type);
 
-    if(dataType == TYPE_CHAR){
-        int rnd;
-        char val;
-        srand(time(NULL));
+    // --- GERAÇÃO ALEATÓRIA COMENTADA ---
+    /*
+    for (int i = 0; i < n; i++) { ... }
+    */
 
-        lista *l = crialista(TYPE_CHAR);
-        for(int i=0; i<10; i++){
-            rnd = (char) (65 + (rand() % 26));
-            push_back(l, &rnd); //envia dado como ponteiro
-        }
+    FILE *file = fopen(filename, "r");
+    if (!file) { printf("Erro: %s não encontrado\n", filename); return m; }
 
-        val = 'A';
-        push_back(l, &val);
-        val = 'B';
-        push_back(l, &val);
-        val = 'C';
-        push_back(l, &val);
-        val = 'D';
-        push_back(l, &val);
-        val = 'E';
-        push_back(l, &val);
+    if (type == TYPE_INT) {
+        int *buffer = malloc(sizeof(int) * n);
+        for (int i = 0; i < n; i++) fscanf(file, "%d", &buffer[i]);
         
-        pop_back(l);
-        val = 'F';
-        insert(2, l, &val);
+        start = clock();
+        for (int i = 0; i < n; i++) push_back(l, &buffer[i]);
+        end = clock();
+        free(buffer);
+    } else {
+        char *buffer = malloc(sizeof(char) * n);
+        for (int i = 0; i < n; i++) fscanf(file, " %c", &buffer[i]);
         
-        erase(2, l);
-        print(l);
-        
-        printf("Tamanho: %d\n", size(l));
-        printf("Elemento no indice 2: %c\n", (char)at(l, 2));
-        
-        clear(l);
-        free(l);
-    }else if(dataType == TYPE_INT){
-        int rnd, val;
-        srand(time(NULL));
-
-        lista *l = crialista(TYPE_INT);
-        
-        for(int i=0; i<10; i++){
-            rnd = rand() % 10;
-            push_back(l, &rnd); //envia dado como ponteiro
-        }
-
-        val = 1;
-        push_back(l, &val);
-        val = 2;
-        push_back(l, &val);
-        val = 3;
-        push_back(l, &val);
-        val = 4;
-        push_back(l, &val);
-        val = 5;
-        push_back(l, &val);
-        
-        pop_back(l);
-        val = 10;
-        insert(2, l, &val);
-        
-        erase(2, l);
-        print(l);
-        
-        printf("Tamanho: %d\n", size(l));
-        printf("Elemento no indice 2: %d\n", at(l, 2));
-        
-        clear(l);
-        free(l);
-        return;
+        start = clock();
+        for (int i = 0; i < n; i++) push_back(l, &buffer[i]);
+        end = clock();
+        free(buffer);
     }
+    fclose(file);
+    m.insere = ((double)(end - start) / CLOCKS_PER_SEC) * 1000.0;
 
-    return;
+    int target = at(l, n/2);
+    start = clock();
+    Busca_linear(l, target);
+    end = clock();
+    m.busca = ((double)(end - start) / CLOCKS_PER_SEC) * 1000.0;
 
+    start = clock();
+    sortCpp(l); //sortVectorStruct(1) para utilizar a lista encadeada
+    end = clock();
+    m.ordena = ((double)(end - start) / CLOCKS_PER_SEC) * 1000.0;
+
+    int mid = size(l) / 2;
+    start = clock();
+    if (mid > 0) erase(mid, l);
+    end = clock();
+    m.remove = ((double)(end - start) / CLOCKS_PER_SEC) * 1000.0;
+
+    m.memoria = (n * sizeof(no) + sizeof(lista)) / 1024;
+
+    clear(l);
+    free(l);
+    return m;
 }
+
 int main() {
-    
-    TestCppVector(TYPE_INT, 10);
-    TestCppVector(TYPE_CHAR, 10);
+    const char* filesInt[] = {"int_100.txt", "int_1000.txt", "int_10000.txt", "int_100000.txt", "int_1000000.txt"};
+    const char* filesChar[] = {"char_100.txt", "char_1000.txt", "char_10000.txt", "char_100000.txt", "char_1000000.txt"};
+    int sizes[] = {100, 1000, 10000, 100000, 1000000};
 
-    testes(5,30,TYPE_INT);
-    testes(5,30,TYPE_CHAR);
+    printf("%-10s %-10s | %-11s | %-10s | %-11s | %-11s | %-10s\n", // para que a saída fique alinhada
+           "Tipo", "Tamanho", "Inserir(ms)", "Buscar(ms)", "Remover(ms)", "Ordenar(ms)", "Memoria");
+    printf("-----------------------------------------------------------------------------------------\n");
 
-    return 0;
+    for (int i = 0; i < 5; i++) {
+        Tempos mi = Executa_operacoes(sizes[i], TYPE_INT, filesInt[i]);
+        printf("%-10s %-10d | %-11.4f | %-10.4f | %-11.4f | %-11.4f | %lu KB\n", "INT", sizes[i], mi.insere, mi.busca, mi.remove, mi.ordena , mi.memoria);
+
+        Tempos mc = Executa_operacoes(sizes[i], TYPE_CHAR, filesChar[i]);
+        printf("%-10s %-10d | %-11.4f | %-10.4f | %-11.4f | %-11.4f | %lu KB\n", "CHAR", sizes[i], mc.insere, mc.busca, mc.remove, mc.ordena, mc.memoria);
+        printf(".........................................................................................\n");
+    }
+
 }
